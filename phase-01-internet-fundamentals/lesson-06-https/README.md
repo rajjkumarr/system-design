@@ -2,43 +2,39 @@
 
 ## Introduction
 
-HTTPS stands for HyperText Transfer Protocol Secure. It is HTTP running over TLS so the data between browser and server is encrypted and protected.
+HTTPS stands for HyperText Transfer Protocol Secure. It is HTTP protected by TLS.
 
 ## Why HTTPS Exists
 
-HTTP sends data in plain text. That means passwords, tokens, and personal data can be read or changed by an attacker if traffic is intercepted.
+HTTP sends data in plain text. Passwords, tokens, and personal data can be read or changed if traffic is intercepted.
 
 HTTPS solves this by giving us:
 - Encryption
 - Integrity
 - Authentication
 
-## How HTTPS Fits in the Request Flow
+## How HTTPS Fits in the Flow
 
 DNS → TCP → TLS handshake → HTTPS request → server → HTTPS response
 
-## What HTTPS Actually Is
+## What HTTPS Is
 
-HTTPS is not a totally different protocol from HTTP. It is HTTP protected by TLS.
+HTTPS is not a different protocol from HTTP. It is HTTP running over TLS.
 
 ## What TLS Does
 
-TLS (Transport Layer Security) protects communication in three ways:
-- Encrypts the data
-- Prevents tampering
-- Verifies the server identity using a certificate
-
-## Why HTTP Alone Is Not Enough
-
-HTTP can move data, but it cannot keep that data private or prove that the server is genuine.
+TLS (Transport Layer Security) protects communication by:
+- Encrypting the data
+- Preventing tampering
+- Verifying the server identity using a certificate
 
 ## Certificate
 
 A certificate is like a digital ID card for the server.
 It tells the browser:
-- which domain the certificate belongs to
+- which domain it belongs to
 - which public key to trust
-- which certificate authority issued it
+- which CA issued it
 - when it expires
 
 ## Certificate Authority
@@ -59,19 +55,19 @@ The browser trusts known CAs.
 9. Both sides now share the same session key
 10. All HTTP data is encrypted with fast symmetric encryption
 
-## Why HTTPS Uses Both Asymmetric and Symmetric Encryption
+## Why HTTPS Uses Both Encryption Types
 
 ### Asymmetric encryption
 Used during the handshake to safely exchange the session key.
 
 ### Symmetric encryption
-Used after the handshake because it is fast and efficient for normal traffic.
+Used after the handshake because it is fast and efficient.
 
-## Why Not Use Only Symmetric Encryption
+## Why Not Only Symmetric Encryption
 
-Symmetric encryption needs a shared secret key. The hard part is safely sharing that key over the Internet.
+Symmetric encryption needs a shared secret key. The difficult part is sharing that key safely over the Internet.
 
-## Why Not Use Only Asymmetric Encryption
+## Why Not Only Asymmetric Encryption
 
 Asymmetric encryption is slower. Using it for every image, CSS file, and API response would make websites too slow.
 
