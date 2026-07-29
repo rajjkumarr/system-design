@@ -1,0 +1,382 @@
+# Explicit Binding (`call()`, `apply()`, `bind()`)
+
+> **Module:** JavaScript - `this`
+>
+> **Difficulty:** ⭐⭐⭐⭐☆
+>
+> **Prerequisites**
+>
+> - Execution Context
+> - `this`
+> - Default Binding
+> - Implicit Binding
+> - Arrow Functions
+>
+> ---
+>
+> # Why This Topic Exists
+>
+> Imagine you have a function:
+>
+> ```javascript
+> function greet() {
+>     console.log(this.name);
+> }
+> ```
+>
+> And an object:
+>
+> ```javascript
+> const person = {
+>     name: "Raj"
+> };
+> ```
+>
+> Now you want:
+>
+> ```javascript
+> greet();
+> ```
+>
+> to print:
+>
+> ```
+> Raj
+> ```
+>
+> But…
+>
+> ```
+> There is no object before greet().
+> ```
+>
+> Therefore JavaScript cannot use **Implicit Binding**.
+>
+> Instead,
+>
+> ```
+> this
+> ```
+>
+> becomes
+>
+> ```
+> undefined
+> ```
+>
+> in strict mode.
+>
+> So how do we tell JavaScript:
+>
+> > "Use **this object**."
+>
+> That's why **Explicit Binding** exists.
+>
+> ---
+>
+> # What is Explicit Binding?
+>
+> Explicit Binding means:
+>
+> > **The developer manually decides what `this` should be.**
+>
+> Instead of JavaScript deciding,
+>
+> **You decide.**
+>
+> JavaScript simply obeys.
+>
+> ---
+>
+> # The Four Ways JavaScript Decides `this`
+>
+> ```
+> Function Call
+>        │
+>        ▼
+> Is it called with new?
+>        │
+>      Yes
+>        ▼
+> new Binding
+>        │
+>      No
+>        ▼
+> Is call/apply/bind used?
+>        │
+>      Yes
+>        ▼
+> Explicit Binding
+>        │
+>      No
+>        ▼
+> Is there an object before the function?
+>        │
+>      Yes
+>        ▼
+> Implicit Binding
+>        │
+>      No
+>        ▼
+> Default Binding
+> ```
+>
+> This decision tree is one of the most important interview concepts.
+>
+> ---
+>
+> # First Principles
+>
+> Functions in JavaScript are **objects**.
+>
+> Since functions are objects, they contain methods.
+>
+> Some important methods are:
+>
+> ```javascript
+> Function.prototype.call
+> Function.prototype.apply
+> Function.prototype.bind
+> ```
+>
+> Every normal JavaScript function automatically inherits these methods.
+>
+> Example:
+>
+> ```javascript
+> function greet() {}
+> ```
+>
+> Internally:
+>
+> ```
+> greet
+>      │
+>      ▼
+> Function.prototype
+>      │
+>      ├── call()
+>      ├── apply()
+>      └── bind()
+> ```
+>
+> That is why every function can use:
+>
+> ```javascript
+> greet.call(...)
+> greet.apply(...)
+> greet.bind(...)
+> ```
+>
+> ---
+>
+> # JavaScript Engine Thinking
+>
+> Consider:
+>
+> ```javascript
+> greet.call(person);
+> ```
+>
+> The engine **does NOT** permanently change the function.
+>
+> Instead, the engine roughly performs:
+>
+> ```
+> Step 1
+>
+> Find greet
+>
+> ↓
+>
+> Step 2
+>
+> Temporarily use
+>
+> this = person
+>
+> ↓
+>
+> Step 3
+>
+> Execute greet
+>
+> ↓
+>
+> Step 4
+>
+> Finish execution
+> ```
+>
+> The original function remains unchanged.
+>
+> ---
+>
+> # Visual Explanation
+>
+> ## Default Binding
+>
+> ```
+> greet()
+>
+> ↓
+>
+> this = undefined
+> ```
+>
+> ---
+>
+> ## Implicit Binding
+>
+> ```
+> person.greet()
+>
+> ↓
+>
+> this = person
+> ```
+>
+> ---
+>
+> ## Explicit Binding
+>
+> ```
+> greet.call(person)
+>
+> ↓
+>
+> this = person
+> ```
+>
+> Notice:
+>
+> We manually selected the object.
+>
+> ---
+>
+> # Why Not Simply Pass the Object?
+>
+> Beginners often ask:
+>
+> ```javascript
+> greet(person);
+> ```
+>
+> Why doesn't this work?
+>
+> Because:
+>
+> ```
+> Function parameters
+> ```
+>
+> and
+>
+> ```
+> this
+> ```
+>
+> are completely different concepts.
+>
+> This:
+>
+> ```javascript
+> function greet(person) {
+>     console.log(person.name);
+> }
+> ```
+>
+> uses an argument.
+>
+> This:
+>
+> ```javascript
+> function greet() {
+>     console.log(this.name);
+> }
+> ```
+>
+> uses `this`.
+>
+> They are not interchangeable.
+>
+> ---
+>
+> # When Should You Use Explicit Binding?
+>
+> Use explicit binding when:
+>
+> ✅ The call site cannot provide the correct `this`.
+>
+> ✅ You want to borrow another object's method.
+>
+> ✅ You are passing callbacks.
+>
+> ✅ You want predictable behaviour.
+>
+> ---
+>
+> # Real World Examples
+>
+> ### Example 1 — Method Borrowing
+>
+> ```javascript
+> const person1 = {
+>     name: "Raj",
+>
+>     greet() {
+>         console.log(this.name);
+>     }
+> };
+>
+> const person2 = {
+>     name: "John"
+> };
+>
+> person1.greet.call(person2);
+> ```
+>
+> Output:
+>
+> ```
+> John
+> ```
+>
+> We borrowed the method without copying it.
+>
+> ---
+>
+> ### Example 2 — Reusing Utility Functions
+>
+> ```javascript
+> function printAge() {
+>     console.log(this.age);
+> }
+>
+> const student = {
+>     age: 22
+> };
+>
+> printAge.call(student);
+> ```
+>
+> Output:
+>
+> ```
+> 22
+> ```
+>
+> The function is reusable because `this` is supplied explicitly.
+>
+> ---
+>
+> # Key Takeaways
+>
+> - `this` can be controlled manually.
+> - `call()`, `apply()`, and `bind()` provide explicit binding.
+> - Functions inherit these methods from `Function.prototype`.
+> - Explicit binding is checked before implicit binding.
+> - The original function is never modified.
+> - Understanding the `this` resolution order is a favourite interview topic.
+> - Explicit binding enables method borrowing, reusable utilities, and reliable callbacks.
+> ```
