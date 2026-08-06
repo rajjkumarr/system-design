@@ -69,7 +69,14 @@ Tells the browser which request headers are allowed.
 ### `Access-Control-Allow-Credentials`
 Used when cookies or other credentials are involved.
 
-## 7) Important Point
+## 7) Cookies and Credentials
+
+Cross-origin cookies are not sent automatically.
+To send cookies:
+- frontend must use `credentials: "include"`
+- backend must use `credentials: true`
+
+## 8) Important Point
 
 CORS is a browser security feature, not backend authentication.
 
@@ -80,7 +87,7 @@ You still need:
 - OAuth
 - API keys
 
-## 8) Real MERN Example
+## 9) Real MERN Example
 
 React app:
 `http://localhost:5173`
@@ -91,22 +98,25 @@ Backend:
 The browser sends the request with an `Origin` header.
 If the server allows that origin, the browser lets JavaScript read the response.
 
-## 9) Common Mistakes
+## 10) Common Mistakes
 
 - CORS is not the same as authentication.
 - Postman does not enforce CORS.
 - The browser, not React, checks CORS.
 - `200 OK` does not always mean the frontend can read the response.
+- `origin: "*"` cannot be used with `credentials: true`.
 
-## 10) Interview Ready Answer
+## 11) Interview Ready Answer
 
 CORS is a browser mechanism that controls whether a frontend from one origin can read a response from another origin. The browser checks the server's CORS headers, and if the server allows the origin, method, and headers, the response is exposed to the JavaScript code.
 
-## 11) Revision Summary
+## 12) Revision Summary
 
 - Origin = protocol + domain + port
 - Different origin if any one part changes
 - Browser enforces CORS
 - Preflight uses `OPTIONS`
 - Server allows origin using CORS headers
+- Cookies need `credentials: include` and `credentials: true`
+- `origin: "*"` cannot be used with credentials
 - CORS is not a backend security system
